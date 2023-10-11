@@ -5,10 +5,11 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/kkoji/graphql-sample/graph"
+	"github.com/kkoji/graphql-sample/internal"
+
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/kkoji/gqlgen-sample/graph"
-	"github.com/kkoji/gqlgen-sample/graph/generated"
 )
 
 const defaultPort = "8080"
@@ -19,7 +20,7 @@ func main() {
 		port = defaultPort
 	}
 
-	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+	srv := handler.NewDefaultServer(internal.NewExecutableSchema(internal.Config{Resolvers: &graph.Resolver{}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)
