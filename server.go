@@ -7,13 +7,14 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/kkoji/graphql-sample/graph"
-	"github.com/kkoji/graphql-sample/graph/services"
-	"github.com/kkoji/graphql-sample/internal"
-
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/volatiletech/sqlboiler/v4/boil"
+
+	"github.com/kkoji/graphql-sample/graph"
+	"github.com/kkoji/graphql-sample/graph/services"
+	"github.com/kkoji/graphql-sample/internal"
 )
 
 const (
@@ -31,12 +32,16 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	defer db.Close()
+
+	boil.DebugMode = true
 
 	service := services.New(db)
 	srv := handler.NewDefaultServer(internal.NewExecutableSchema(
 		internal.Config{Resolvers: &graph.Resolver{
-			Srv: service,
+			Srv:     service,
+			Loaders: graph.NewLoaders(service),
 		}}),
 	)
 

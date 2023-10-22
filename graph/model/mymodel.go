@@ -2,14 +2,15 @@ package model
 
 import (
 	"fmt"
-	"github.com/99designs/gqlgen/graphql"
 	"io"
 	"net/url"
+
+	"github.com/99designs/gqlgen/graphql"
 )
 
 func MarshalURI(u url.URL) graphql.Marshaler {
 	return graphql.WriterFunc(func(w io.Writer) {
-		io.WriteString(w, u.String())
+		io.WriteString(w, fmt.Sprintf(`"%s"`, u.String()))
 	})
 }
 

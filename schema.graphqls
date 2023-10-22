@@ -169,7 +169,6 @@ type Query {
     node(
         id: ID!
     ): Node
-
 }
 
 input AddProjectV2ItemByIdInput {
